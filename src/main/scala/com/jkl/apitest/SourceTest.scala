@@ -1,6 +1,10 @@
 package com.jkl.apitest
 
 import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011
+import org.apache.flink.streaming.util.serialization.SimpleStringSchema
+
+import java.util.Properties
 
 //定义样例类，温度传感器
 case class SensorReading(
@@ -23,11 +27,21 @@ object SourceTest {
     )
 
     val stream1 = env.fromCollection(dataList)
-    stream1.print()
+
 
     //2.从文件中获取数据
     //env.readTextFile("")
 
+    //3.从kafka中获取数据
+    val properties = new Properties()
+    properties.setProperty("bootstrap.servers", "192.168.53.103:9092")
+    properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
+    properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
+    properties.setProperty("auto.offset.reset", "latest")
+
+    val stream3 = env.addSource(new FlinkKafkaConsumer011[String]("sensor", new SimpleStringSchema(), properties))
+
+    stream3.print()
     env.execute("SourceTest")
 
   }
