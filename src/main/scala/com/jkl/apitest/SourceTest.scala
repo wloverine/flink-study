@@ -34,10 +34,10 @@ object SourceTest {
 
     //3.从kafka中获取数据
     val properties = new Properties()
-    properties.setProperty("bootstrap.servers", "192.168.53.103:9092")
+    properties.setProperty("bootstrap.servers", "localhost:9092")
     properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    properties.setProperty("auto.offset.reset", "latest")
+    properties.setProperty("auto.offset.reset", "earliest")
 
     val stream3 = env.addSource(new FlinkKafkaConsumer011[String]("sensor", new SimpleStringSchema(), properties))
 
