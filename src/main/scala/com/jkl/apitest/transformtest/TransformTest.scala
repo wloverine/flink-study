@@ -1,6 +1,7 @@
-package com.jkl.apitest
+package com.jkl.apitest.transformtest
 
-import org.apache.flink.api.common.functions.RichFilterFunction
+import com.jkl.apitest.sinktest.MyRedisMapper
+import com.jkl.apitest.sourcetest.SensorReading
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.redis.RedisSink
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig
@@ -12,7 +13,7 @@ object TransformTest {
     env.setParallelism(1)
 
     //minBy
-    val stream1 = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
+    val stream1: DataStream[SensorReading] = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
       .map(data => {
         val arr = data.split(",")
         SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
@@ -21,7 +22,7 @@ object TransformTest {
       .minBy(2)
 
     //reduce
-    val stream2 = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
+    val stream2: DataStream[SensorReading] = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
       .map(data => {
         val arr = data.split(",")
         SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
@@ -30,13 +31,13 @@ object TransformTest {
       .reduce((x, y) => SensorReading(x.id, x.timestamp + 1, y.temperature))
 
     //split&select
-    val splitStream = stream2.split(data => {
+    val splitStream: SplitStream[SensorReading] = stream2.split(data => {
       if (data.temperature > 30) Seq("high") else Seq("low")
     })
 
-    val high = splitStream.select("high")
-    val low = splitStream.select("low")
-    val all = splitStream.select("high", "low")
+    val high: DataStream[SensorReading] = splitStream.select("high")
+    val low: DataStream[SensorReading] = splitStream.select("low")
+    val all: DataStream[SensorReading] = splitStream.select("high", "low")
 
     //Connect&CoMap
     val warning: DataStream[(String, Double)] = high.map(sensorData => {
@@ -56,7 +57,7 @@ object TransformTest {
     val union = high.union(low)
 
     val conf = new FlinkJedisPoolConfig.Builder().setHost("localhost").setPort(6379).build()
-    union.addSink(new RedisSink[SensorReading](conf,new MyRedisMapper))
+    union.addSink(new RedisSink[SensorReading](conf, new MyRedisMapper))
 
     env.execute("TransformTest")
   }

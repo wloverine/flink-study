@@ -1,7 +1,8 @@
-package com.jkl.apitest
+package com.jkl.apitest.sourcetest
 
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.api.scala._
+
 import scala.util.Random
 
 class MySensorSource extends SourceFunction[SensorReading] {

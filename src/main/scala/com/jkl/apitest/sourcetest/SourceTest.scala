@@ -1,4 +1,4 @@
-package com.jkl.apitest
+package com.jkl.apitest.sourcetest
 
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011

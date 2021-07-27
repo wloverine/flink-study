@@ -1,5 +1,6 @@
-package com.jkl.apitest
+package com.jkl.apitest.sinktest
 
+import com.jkl.apitest.sourcetest.SensorReading
 import org.apache.flink.streaming.connectors.redis.common.mapper.{RedisCommand, RedisCommandDescription, RedisMapper}
 
 class MyRedisMapper extends RedisMapper[SensorReading]{
