@@ -10,19 +10,21 @@ object TransformTest {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
 
+    val path: String = this.getClass.getClassLoader.getResource("sensor.txt").getPath
+
     env.setParallelism(1)
 
     //minBy
-    val stream1: DataStream[SensorReading] = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
+    val stream1: DataStream[SensorReading] = env.readTextFile(path)
       .map(data => {
         val arr = data.split(",")
         SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
       })
       .keyBy(_.id)
-      .minBy(2)
+      .minBy(2) //实施输出每个key对应温度最小的那条记录
 
     //reduce
-    val stream2: DataStream[SensorReading] = env.readTextFile("C:\\workspace\\flink-study\\src\\main\\resources\\sensor.txt")
+    val stream2: DataStream[SensorReading] = env.readTextFile(path)
       .map(data => {
         val arr = data.split(",")
         SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
@@ -56,8 +58,7 @@ object TransformTest {
     //2.Connect 只能操作两个流，Union 可以操作多个。
     val union = high.union(low)
 
-    val conf = new FlinkJedisPoolConfig.Builder().setHost("localhost").setPort(6379).build()
-    union.addSink(new RedisSink[SensorReading](conf, new MyRedisMapper))
+    stream1.print()
 
     env.execute("TransformTest")
   }

@@ -8,15 +8,16 @@ import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 object KafkaSinkTest {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
+    val path = this.getClass.getClassLoader.getResource("sensor.txt").getPath
     env.setParallelism(1)
 
-    val dataStream: DataStream[String] = env.readTextFile("/Users/daryl/IdeaProjects/flink-study/src/main/resources/sensor.txt")
+    val dataStream: DataStream[String] = env.readTextFile(path)
       .map(data => {
         val fields = data.split(",")
         SensorReading(fields(0), fields(1).toLong, fields(2).toDouble).toString
       })
 
-//    dataStream.writeToSocket("localhost",9999,new SimpleStringSchema())
+    //    dataStream.writeToSocket("localhost",9999,new SimpleStringSchema())
     dataStream.print()
 
     env.execute("KafkaSinkTest")

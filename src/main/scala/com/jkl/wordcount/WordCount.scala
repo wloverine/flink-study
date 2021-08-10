@@ -7,12 +7,11 @@ object WordCount extends App {
   //创建执行环境
   val env: ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
 
-  val tool: ParameterTool = ParameterTool.fromArgs(args)
-
-  val file: String = tool.get("file")
-
+  //获取文件路径
+  val path: String = this.getClass.getClassLoader.getResource("test.txt").getPath
+  
   //读取文本文件
-  env.readTextFile(file)
+  env.readTextFile(path)
     .flatMap(_.split(" "))
     .map((_, 1))
     .groupBy(0)
