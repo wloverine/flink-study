@@ -3,6 +3,8 @@ package com.jkl.apitest.sinktest
 import com.jkl.apitest.sourcetest.SensorReading
 import org.apache.flink.api.scala._
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011
+import org.apache.flink.streaming.util.serialization
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 
 object KafkaSinkTest {
@@ -17,8 +19,11 @@ object KafkaSinkTest {
         SensorReading(fields(0), fields(1).toLong, fields(2).toDouble).toString
       })
 
-    //    dataStream.writeToSocket("localhost",9999,new SimpleStringSchema())
-    dataStream.print()
+    //写入socket流
+//    dataStream.writeToSocket("localhost", 9999, new SimpleStringSchema())
+
+    //写入kafka
+    dataStream.addSink(new FlinkKafkaProducer011[String]("localhost:9092","sensor",new SimpleStringSchema()))
 
     env.execute("KafkaSinkTest")
   }
