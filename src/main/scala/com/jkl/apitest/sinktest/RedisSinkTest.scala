@@ -5,6 +5,7 @@ import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.redis.RedisSink
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig
+import org.apache.flink.streaming.connectors.redis.common.mapper.{RedisCommand, RedisCommandDescription, RedisMapper}
 
 import scala.io.Source
 
@@ -30,4 +31,14 @@ object RedisSinkTest {
     env.execute("RedisSinkTest")
 
   }
+}
+
+class MyRedisMapper extends RedisMapper[SensorReading]{
+  override def getCommandDescription: RedisCommandDescription = {
+    new RedisCommandDescription(RedisCommand.HSET,"sensor_temperature")
+  }
+
+  override def getKeyFromData(t: SensorReading): String = t.id
+
+  override def getValueFromData(t: SensorReading): String = t.temperature.toString
 }
