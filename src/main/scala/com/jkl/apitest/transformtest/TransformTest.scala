@@ -21,7 +21,7 @@ object TransformTest {
         SensorReading(arr(0), arr(1).toLong, arr(2).toDouble)
       })
       .keyBy(_.id)
-      .minBy(2) //实施输出每个key对应温度最小的那条记录
+      .minBy(2) //实时输出每个key对应温度最小的那条记录
 
     //reduce
     val stream2: DataStream[SensorReading] = env.readTextFile(path)
