@@ -6,7 +6,7 @@ import org.apache.flink.api.scala._
 import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011
+import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaProducer, FlinkKafkaProducer011}
 import org.apache.flink.streaming.util.serialization
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 
@@ -26,13 +26,13 @@ object KafkaSinkTest {
 //    dataStream.writeToSocket("localhost", 9999, new SimpleStringSchema())
 
     //写入到文件
-    dataStream.addSink(StreamingFileSink.forRowFormat(
+/*    dataStream.addSink(StreamingFileSink.forRowFormat(
       new Path("/Users/daryl/IdeaProjects/flink-study/src/main/resources/res.txt"),
       new SimpleStringEncoder[String]("utf-8")
-    ).build())
+    ).build())*/
 
     //写入kafka
-//    dataStream.addSink(new FlinkKafkaProducer011[String]("localhost:9092","sensor",new SimpleStringSchema()))
+    dataStream.addSink(new FlinkKafkaProducer[String]("localhost:9092","sensor",new SimpleStringSchema()))
 
     env.execute("KafkaSinkTest")
   }

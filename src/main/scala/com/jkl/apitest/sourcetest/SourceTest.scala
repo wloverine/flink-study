@@ -1,7 +1,7 @@
 package com.jkl.apitest.sourcetest
 
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 
 import java.util.Properties
@@ -39,7 +39,7 @@ object SourceTest {
     properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     properties.setProperty("auto.offset.reset", "earliest")
 
-    val stream3 = env.addSource(new FlinkKafkaConsumer011[String]("sensor", new SimpleStringSchema(), properties))
+    val stream3 = env.addSource(new FlinkKafkaConsumer[String]("sensor",new SimpleStringSchema(),properties))
 
     stream3.print()
     env.execute("SourceTest")
