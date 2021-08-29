@@ -1,9 +1,11 @@
 package com.jkl.apitest.sinktest
 
 import com.jkl.apitest.sourcetest.SensorReading
-import org.apache.flink.connector.jdbc.{JdbcConnectionOptions, JdbcExecutionOptions, JdbcSink}
+import org.apache.flink.connector.jdbc.{JdbcConnectionOptions, JdbcExecutionOptions, JdbcSink, JdbcStatementBuilder}
 import org.apache.flink.streaming.api.functions.sink.SinkFunction
 import org.apache.flink.streaming.api.scala._
+
+import java.sql.PreparedStatement
 
 object JdbcSinkTest {
   def main(args: Array[String]): Unit = {
@@ -17,13 +19,19 @@ object JdbcSinkTest {
         SensorReading(fields(0), fields(1).toLong, fields(2).toDouble)
       })
 
+    val sql = "insert into sensor_temperature(id,timestamp,temperature) values(?,?,?)"
+
+    val statementBuilder: JdbcStatementBuilder[SensorReading] = new JdbcStatementBuilder[SensorReading] {
+      override def accept(t: PreparedStatement, u: SensorReading): Unit = {
+        t.setObject(1, u.id)
+        t.setObject(2, u.timestamp)
+        t.setObject(3, u.temperature)
+      }
+    }
+
     val sinkFunction: SinkFunction[SensorReading] = JdbcSink.sink(
-      "insert into sensor_temperature(id,timestamp,temperature) values(?,?,?)",
-      (ps, sensor) => {
-        ps.setObject(1, sensor.id)
-        ps.setObject(2, sensor.timestamp)
-        ps.setObject(3, sensor.temperature)
-      },
+      sql,
+      statementBuilder,
       JdbcExecutionOptions.builder()
         .withBatchSize(1000)
         .withBatchIntervalMs(200)
