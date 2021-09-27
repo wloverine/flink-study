@@ -1,10 +1,7 @@
 package com.jkl.apitest.transformtest
 
-import com.jkl.apitest.sinktest.MyRedisMapper
 import com.jkl.apitest.sourcetest.SensorReading
 import org.apache.flink.streaming.api.scala._
-import org.apache.flink.streaming.connectors.redis.RedisSink
-import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig
 
 object TransformTest {
   def main(args: Array[String]): Unit = {
@@ -15,6 +12,8 @@ object TransformTest {
     env.setParallelism(1)
 
     //minBy
+    //min和minBy的区别是min除了会将分组字段（此处为id）以及比较字段返回，其他字段则保留其第一次出现时候的值。
+    //而minBy则是保留比较字段最小的对应的整个元素。
     val stream1: DataStream[SensorReading] = env.readTextFile(path)
       .map(data => {
         val arr = data.split(",")
