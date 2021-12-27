@@ -1,14 +1,10 @@
 package com.jkl.apitest.sinktest
 
 import com.jkl.apitest.sourcetest.SensorReading
-import org.apache.flink.api.common.serialization.SimpleStringEncoder
+import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.api.scala._
-import org.apache.flink.core.fs.Path
-import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
-import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaProducer, FlinkKafkaProducer011}
-import org.apache.flink.streaming.util.serialization
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer
 
 object KafkaSinkTest {
   def main(args: Array[String]): Unit = {
