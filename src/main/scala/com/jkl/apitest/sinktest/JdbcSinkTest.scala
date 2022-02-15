@@ -7,6 +7,9 @@ import org.apache.flink.streaming.api.scala._
 
 import java.sql.PreparedStatement
 
+/**
+ * 将sensor.txt中的数据读取拆分字段后写入mysql
+ */
 object JdbcSinkTest {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -38,7 +41,7 @@ object JdbcSinkTest {
         .withMaxRetries(5)
         .build(),
       new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-        .withUrl("jdbc:mysql://localhost:3306/learnjdbc")
+        .withUrl("jdbc:mysql://localhost:3306/spark")
         .withDriverName("org.mariadb.jdbc.Driver")
         .withUsername("root")
         .withPassword("jkl123")
