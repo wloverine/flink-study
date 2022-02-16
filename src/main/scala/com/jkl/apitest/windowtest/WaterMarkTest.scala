@@ -8,7 +8,18 @@ import org.joda.time.DateTime
 
 import java.time.Duration
 
-
+/**
+ * 接收socket的数据，并设置最大延迟时间为2s，窗口时间为3s
+数据长这样：
+s3 1639100010955
+s2 1639100009955
+s1 1639100008955
+s0 1639100007955
+s4 1639100011955
+s5 1639100012955
+s6 1639100013955
+s7 1639100016955
+ */
 object WaterMarkTest {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -46,7 +57,8 @@ object WaterMarkTest {
           }
         })
     )
-
+    
+    //分组聚合，根据key相同的来进行分组，并且设置窗口大小为3s
     waterDS.keyBy(_._1).timeWindow(Time.seconds(3))
       .reduce((x, y) => (x._1, x._2 + y._2))
       .print()
