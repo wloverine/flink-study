@@ -1,6 +1,6 @@
-package com.jkl.apitest.sinktest
+package com.jkl.scala.sinktest
 
-import com.jkl.apitest.sourcetest.SensorReading
+import com.jkl.scala.sourcetest.SensorReading
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.redis.RedisSink

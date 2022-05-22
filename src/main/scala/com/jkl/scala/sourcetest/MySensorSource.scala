@@ -1,4 +1,4 @@
-package com.jkl.apitest.sourcetest
+package com.jkl.scala.sourcetest
 
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.api.scala._

@@ -1,4 +1,4 @@
-package com.jkl.apitest.windowtest
+package com.jkl.scala.windowtest
 
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
 import org.apache.flink.streaming.api.TimeCharacteristic

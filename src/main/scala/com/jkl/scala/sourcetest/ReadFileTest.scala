@@ -1,4 +1,4 @@
-package com.jkl.apitest.sourcetest
+package com.jkl.scala.sourcetest
 
 import org.apache.flink.api.common.io.GlobFilePathFilter
 import org.apache.flink.api.java.io.TextInputFormat

@@ -1,6 +1,6 @@
-package com.jkl.apitest.windowtest
+package com.jkl.scala.windowtest
 
-import com.jkl.apitest.sourcetest.MySensorSource
+import com.jkl.scala.sourcetest.MySensorSource
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time

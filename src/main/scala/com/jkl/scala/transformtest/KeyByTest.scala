@@ -1,4 +1,4 @@
-package com.jkl.apitest.transformtest
+package com.jkl.scala.transformtest
 
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction
 import org.apache.flink.streaming.api.scala._
